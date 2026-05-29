@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { validarCpf, gerarCpf } from "./utils/cpf";
 import { validarCnpjNumerico, gerarCnpjNumerico } from "./utils/cnpjNumerico";
 import {
@@ -6,189 +6,214 @@ import {
   gerarCnpjAlfanumerico,
 } from "./utils/cnpjAlfanumerico";
 
-const TIPOS = [
-  { value: "cpf", label: "CPF" },
-  { value: "cnpj-antigo", label: "CNPJ — Formato antigo (numérico)" },
-  { value: "cnpj-novo", label: "CNPJ — Novo formato (alfanumérico)" },
+const GERADORES = [
+  {
+    id: "cpf",
+    titulo: "CPF",
+    descricao: "Gera um CPF válido com máscara.",
+    acao: () => gerarCpf(true),
+  },
+  {
+    id: "cnpj-numerico",
+    titulo: "CNPJ numérico",
+    descricao: "Gera um CNPJ no formato antigo.",
+    acao: () => gerarCnpjNumerico(true),
+  },
+  {
+    id: "cnpj-alfanumerico",
+    titulo: "CNPJ alfanumérico",
+    descricao: "Gera um CNPJ no novo formato.",
+    acao: () => gerarCnpjAlfanumerico(true),
+  },
 ];
 
-function getPlaceholder(tipo) {
-  if (tipo === "cpf") return "123.456.789-09";
-  if (tipo === "cnpj-antigo") return "12.345.678/0001-95";
-  return "12.ABC.345/01DE-35";
+function limparDocumento(valor) {
+  return valor.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
 }
 
-function validarPorTipo(tipo, valor) {
-  if (tipo === "cpf") return validarCpf(valor);
-  if (tipo === "cnpj-antigo") return validarCnpjNumerico(valor);
-  return validarCnpjAlfanumerico(valor);
-}
+function identificarDocumento(valor) {
+  const documento = limparDocumento(valor);
 
-function gerarPorTipo(tipo) {
-  if (tipo === "cpf") return gerarCpf(true);
-  if (tipo === "cnpj-antigo") return gerarCnpjNumerico(true);
-  return gerarCnpjAlfanumerico(true);
+  if (!documento) {
+    return {
+      status: "erro",
+      mensagem: "Informe um CPF ou CNPJ.",
+    };
+  }
+
+  const modelosPossiveis = [];
+
+  if (/^\d{11}$/.test(documento)) {
+    modelosPossiveis.push({
+      tipo: "CPF",
+      valido: validarCpf(documento),
+    });
+  }
+
+  if (/^\d{14}$/.test(documento)) {
+    modelosPossiveis.push({
+      tipo: "CNPJ numérico",
+      valido: validarCnpjNumerico(documento),
+    });
+  }
+
+  if (/^[A-Z0-9]{14}$/.test(documento) && /[A-Z]/.test(documento)) {
+    modelosPossiveis.push({
+      tipo: "CNPJ alfanumérico",
+      valido: validarCnpjAlfanumerico(documento),
+    });
+  }
+
+  if (modelosPossiveis.length === 0) {
+    return {
+      status: "erro",
+      mensagem:
+        "Formato não identificado. Informe um CPF com 11 números ou um CNPJ com 14 caracteres.",
+    };
+  }
+
+  const documentoValido = modelosPossiveis.find((modelo) => modelo.valido);
+
+  if (!documentoValido) {
+    return {
+      status: "erro",
+      mensagem: `${modelosPossiveis[0].tipo} inválido.`,
+    };
+  }
+
+  return {
+    status: "sucesso",
+    tipo: documentoValido.tipo,
+    mensagem: `Documento válido — ${documentoValido.tipo}.`,
+  };
 }
 
 export default function App() {
-  const [tipo, setTipo] = useState("cpf");
   const [valor, setValor] = useState("");
-  const [erro, setErro] = useState("");
-  const [sucesso, setSucesso] = useState("");
-  const [gerado, setGerado] = useState("");
-  const [easterEgg, setEasterEgg] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setEasterEgg(true);
-      setTimeout(() => setEasterEgg(false), 2200);
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  function handleTipoChange(e) {
-    setTipo(e.target.value);
-    setValor("");
-    setErro("");
-    setSucesso("");
-    setGerado("");
-  }
+  const [resultado, setResultado] = useState(null);
+  const [gerado, setGerado] = useState(null);
+  const [copiado, setCopiado] = useState(false);
 
   function handleChange(event) {
-    setValor(event.target.value);
-    setErro("");
-    setSucesso("");
-  }
-
-  function handleBlur() {
-    validarCampo();
+    setValor(event.target.value.toUpperCase());
+    setResultado(null);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    validarCampo();
+    setResultado(identificarDocumento(valor));
   }
 
-  function validarCampo() {
-    if (!valor.trim()) {
-      setErro("Informe um valor.");
-      setSucesso("");
-      return;
-    }
+  function handleGerar(gerador) {
+    setGerado({
+      tipo: gerador.titulo,
+      valor: gerador.acao(),
+    });
 
-    if (!validarPorTipo(tipo, valor)) {
-      setErro("Documento inválido.");
-      setSucesso("");
-      return;
-    }
-
-    setErro("");
-    setSucesso("Documento válido ✓");
+    setCopiado(false);
+    setResultado(null);
   }
 
-  function handleGerar() {
-    setGerado(gerarPorTipo(tipo));
-    setValor("");
-    setErro("");
-    setSucesso("");
+  async function handleCopiarGerado() {
+    if (!gerado?.valor) return;
+
+    await navigator.clipboard.writeText(gerado.valor);
+    setCopiado(true);
   }
 
-  function handleCopiarGerado() {
-    navigator.clipboard.writeText(gerado);
-  }
-
-  const tipoLabel = TIPOS.find((t) => t.value === tipo)?.label ?? "";
+  const temErro = resultado?.status === "erro";
+  const temSucesso = resultado?.status === "sucesso";
 
   return (
-    <>
-      <main className="page">
-        <section className="card">
-          <h1>Validador &amp; Gerador</h1>
-
+    <main className="page">
+      <section className="card">
+        <header className="header">
+          <span className="eyebrow">Validador e gerador</span>
+          <h1>CPF e CNPJ</h1>
           <p className="description">
-            Selecione o tipo de documento, valide ou gere valores com máscara.
+            Valide CPF, CNPJ numérico ou CNPJ alfanumérico em um único campo.
+            Para gerar documentos, escolha uma das opções abaixo.
           </p>
+        </header>
 
-          <div className="field" style={{ marginBottom: 20 }}>
-            <label htmlFor="tipo">Tipo de documento</label>
-            <select id="tipo" value={tipo} onChange={handleTipoChange}>
-              {TIPOS.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        <form className="validator" onSubmit={handleSubmit} noValidate>
+          <div className="field">
+            <label htmlFor="documento">Documento</label>
 
-          <form onSubmit={handleSubmit} noValidate>
-            <div className="field">
-              <label htmlFor="valor">Validar {tipoLabel}</label>
+            <input
+              id="documento"
+              name="documento"
+              type="text"
+              value={valor}
+              onChange={handleChange}
+              placeholder="Ex: 02118578075, 12.345.678/0001-95 ou 12.ABC.345/01DE-35"
+              aria-invalid={temErro}
+              aria-describedby="documento-ajuda documento-feedback"
+              autoComplete="off"
+            />
 
-              <input
-                id="valor"
-                name="valor"
-                type="text"
-                value={valor}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder={getPlaceholder(tipo)}
-                aria-invalid={!!erro}
-                aria-describedby={
-                  erro ? "valor-erro" : sucesso ? "valor-sucesso" : undefined
-                }
-              />
+            <p id="documento-ajuda" className="hint">
+              Você pode digitar com ou sem pontuação.
+            </p>
 
-              {erro && (
-                <p id="valor-erro" className="message error">
-                  {erro}
-                </p>
-              )}
-
-              {sucesso && (
-                <p id="valor-sucesso" className="message success">
-                  {sucesso}
-                </p>
-              )}
-            </div>
-
-            <button type="submit">Validar</button>
-          </form>
-
-          <div className="divider" />
-
-          <div className="field" style={{ marginTop: 20 }}>
-            <label>Gerar {tipoLabel}</label>
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={handleGerar}
-            >
-              Gerar
-            </button>
-
-            {gerado && (
-              <div className="generated">
-                <code>{gerado}</code>
-                <button
-                  type="button"
-                  className="btn-copy"
-                  onClick={handleCopiarGerado}
-                >
-                  Copiar
-                </button>
-              </div>
+            {resultado && (
+              <p
+                id="documento-feedback"
+                className={`feedback ${
+                  temSucesso ? "feedback-success" : "feedback-error"
+                }`}
+                role={temErro ? "alert" : "status"}
+              >
+                {resultado.mensagem}
+              </p>
             )}
           </div>
-        </section>
-      </main>
 
-      {easterEgg && (
-        <img
-          src="/fabricio-rei-de-tudo-e-todos.png"
-          alt=""
-          className="easter-egg"
-        />
-      )}
-    </>
+          <button type="submit" className="btn-primary" disabled={!valor.trim()}>
+            Validar documento
+          </button>
+        </form>
+
+        <div className="divider" />
+
+        <section className="generators" aria-labelledby="generators-title">
+          <div className="section-header">
+            <h2 id="generators-title">Geradores</h2>
+            <p>Escolha diretamente o tipo de documento que deseja gerar.</p>
+          </div>
+
+          <div className="generator-grid">
+            {GERADORES.map((gerador) => (
+              <button
+                key={gerador.id}
+                type="button"
+                className="generator-card"
+                onClick={() => handleGerar(gerador)}
+              >
+                <strong>{gerador.titulo}</strong>
+                <span>{gerador.descricao}</span>
+              </button>
+            ))}
+          </div>
+
+          {gerado && (
+            <div className="generated" role="status">
+              <div>
+                <span className="generated-label">{gerado.tipo} gerado</span>
+                <code>{gerado.valor}</code>
+              </div>
+
+              <button
+                type="button"
+                className="btn-copy"
+                onClick={handleCopiarGerado}
+              >
+                {copiado ? "Copiado" : "Copiar"}
+              </button>
+            </div>
+          )}
+        </section>
+      </section>
+    </main>
   );
 }
