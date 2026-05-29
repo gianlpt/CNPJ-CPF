@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { validarCpf, gerarCpf } from "./utils/cpf";
 import { validarCnpjNumerico, gerarCnpjNumerico } from "./utils/cnpjNumerico";
 import {
@@ -36,6 +36,15 @@ export default function App() {
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
   const [gerado, setGerado] = useState("");
+  const [easterEgg, setEasterEgg] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setEasterEgg(true);
+      setTimeout(() => setEasterEgg(false), 2200);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   function handleTipoChange(e) {
     setTipo(e.target.value);
@@ -91,81 +100,95 @@ export default function App() {
   const tipoLabel = TIPOS.find((t) => t.value === tipo)?.label ?? "";
 
   return (
-    <main className="page">
-      <section className="card">
-        <h1>Validador &amp; Gerador</h1>
+    <>
+      <main className="page">
+        <section className="card">
+          <h1>Validador &amp; Gerador</h1>
 
-        <p className="description">
-          Selecione o tipo de documento, valide ou gere valores com máscara.
-        </p>
+          <p className="description">
+            Selecione o tipo de documento, valide ou gere valores com máscara.
+          </p>
 
-        <div className="field" style={{ marginBottom: 20 }}>
-          <label htmlFor="tipo">Tipo de documento</label>
-          <select id="tipo" value={tipo} onChange={handleTipoChange}>
-            {TIPOS.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <form onSubmit={handleSubmit} noValidate>
-          <div className="field">
-            <label htmlFor="valor">Validar {tipoLabel}</label>
-
-            <input
-              id="valor"
-              name="valor"
-              type="text"
-              value={valor}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder={getPlaceholder(tipo)}
-              aria-invalid={!!erro}
-              aria-describedby={
-                erro ? "valor-erro" : sucesso ? "valor-sucesso" : undefined
-              }
-            />
-
-            {erro && (
-              <p id="valor-erro" className="message error">
-                {erro}
-              </p>
-            )}
-
-            {sucesso && (
-              <p id="valor-sucesso" className="message success">
-                {sucesso}
-              </p>
-            )}
+          <div className="field" style={{ marginBottom: 20 }}>
+            <label htmlFor="tipo">Tipo de documento</label>
+            <select id="tipo" value={tipo} onChange={handleTipoChange}>
+              {TIPOS.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <button type="submit">Validar</button>
-        </form>
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="field">
+              <label htmlFor="valor">Validar {tipoLabel}</label>
 
-        <div className="divider" />
+              <input
+                id="valor"
+                name="valor"
+                type="text"
+                value={valor}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder={getPlaceholder(tipo)}
+                aria-invalid={!!erro}
+                aria-describedby={
+                  erro ? "valor-erro" : sucesso ? "valor-sucesso" : undefined
+                }
+              />
 
-        <div className="field" style={{ marginTop: 20 }}>
-          <label>Gerar {tipoLabel}</label>
-          <button type="button" className="btn-secondary" onClick={handleGerar}>
-            Gerar
-          </button>
+              {erro && (
+                <p id="valor-erro" className="message error">
+                  {erro}
+                </p>
+              )}
 
-          {gerado && (
-            <div className="generated">
-              <code>{gerado}</code>
-              <button
-                type="button"
-                className="btn-copy"
-                onClick={handleCopiarGerado}
-              >
-                Copiar
-              </button>
+              {sucesso && (
+                <p id="valor-sucesso" className="message success">
+                  {sucesso}
+                </p>
+              )}
             </div>
-          )}
-        </div>
-      </section>
-    </main>
+
+            <button type="submit">Validar</button>
+          </form>
+
+          <div className="divider" />
+
+          <div className="field" style={{ marginTop: 20 }}>
+            <label>Gerar {tipoLabel}</label>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleGerar}
+            >
+              Gerar
+            </button>
+
+            {gerado && (
+              <div className="generated">
+                <code>{gerado}</code>
+                <button
+                  type="button"
+                  className="btn-copy"
+                  onClick={handleCopiarGerado}
+                >
+                  Copiar
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+
+      {easterEgg && (
+        <img
+          src="/fabricio-rei-de-tudo-e-todos.png"
+          alt=""
+          className="easter-egg"
+        />
+      )}
+    </>
   );
 }
