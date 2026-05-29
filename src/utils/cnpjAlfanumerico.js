@@ -26,6 +26,26 @@ export function validarCnpjAlfanumerico(valor) {
   return digitosInformados === digitosCalculados;
 }
 
+export function gerarCnpjAlfanumerico(formatado = true) {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const base = Array.from(
+    { length: 12 },
+    () => chars[Math.floor(Math.random() * chars.length)]
+  ).join("");
+
+  const d1 = calcularDigitoVerificador(base);
+  const d2 = calcularDigitoVerificador(base + d1);
+
+  const cnpj = base + d1 + d2;
+
+  if (!formatado) return cnpj;
+
+  return `${cnpj.slice(0, 2)}.${cnpj.slice(2, 5)}.${cnpj.slice(
+    5,
+    8
+  )}/${cnpj.slice(8, 12)}-${cnpj.slice(12)}`;
+}
+
 export function normalizarCnpjAlfanumerico(valor) {
   return String(valor)
     .toUpperCase()
