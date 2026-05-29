@@ -10,20 +10,20 @@ const GERADORES = [
   {
     id: "cpf",
     titulo: "CPF",
-    descricao: "Gera um CPF válido com máscara.",
-    acao: () => gerarCpf(true),
+    descricao: "Gera um CPF válido.",
+    acao: (usarMascara) => gerarCpf(usarMascara),
   },
   {
     id: "cnpj-numerico",
     titulo: "CNPJ numérico",
-    descricao: "Gera um CNPJ no formato antigo.",
-    acao: () => gerarCnpjNumerico(true),
+    descricao: "Gera um CNPJ válido no formato antigo.",
+    acao: (usarMascara) => gerarCnpjNumerico(usarMascara),
   },
   {
     id: "cnpj-alfanumerico",
     titulo: "CNPJ alfanumérico",
-    descricao: "Gera um CNPJ no novo formato.",
-    acao: () => gerarCnpjAlfanumerico(true),
+    descricao: "Gera um CNPJ válido no novo formato.",
+    acao: (usarMascara) => gerarCnpjAlfanumerico(usarMascara),
   },
 ];
 
@@ -93,6 +93,7 @@ export default function App() {
   const [resultado, setResultado] = useState(null);
   const [gerado, setGerado] = useState(null);
   const [copiado, setCopiado] = useState(false);
+  const [usarMascara, setUsarMascara] = useState(true);
 
   function handleChange(event) {
     setValor(event.target.value.toUpperCase());
@@ -107,7 +108,8 @@ export default function App() {
   function handleGerar(gerador) {
     setGerado({
       tipo: gerador.titulo,
-      valor: gerador.acao(),
+      valor: gerador.acao(usarMascara),
+      mascara: usarMascara ? "com máscara" : "sem máscara",
     });
 
     setCopiado(false);
@@ -130,9 +132,10 @@ export default function App() {
         <header className="header">
           <span className="eyebrow">Validador e gerador</span>
           <h1>CPF e CNPJ</h1>
+
           <p className="description">
             Valide CPF, CNPJ numérico ou CNPJ alfanumérico em um único campo.
-            Para gerar documentos, escolha uma das opções abaixo.
+            Para gerar documentos, escolha o tipo e o formato desejado.
           </p>
         </header>
 
@@ -179,8 +182,37 @@ export default function App() {
         <section className="generators" aria-labelledby="generators-title">
           <div className="section-header">
             <h2 id="generators-title">Geradores</h2>
-            <p>Escolha diretamente o tipo de documento que deseja gerar.</p>
+            <p>
+              Escolha se deseja gerar o documento com máscara ou somente com os
+              caracteres.
+            </p>
           </div>
+
+          <fieldset className="format-control">
+            <legend>Formato do documento gerado</legend>
+
+            <div className="format-options">
+              <label className="format-option">
+                <input
+                  type="radio"
+                  name="formato"
+                  checked={usarMascara}
+                  onChange={() => setUsarMascara(true)}
+                />
+                <span>Com máscara</span>
+              </label>
+
+              <label className="format-option">
+                <input
+                  type="radio"
+                  name="formato"
+                  checked={!usarMascara}
+                  onChange={() => setUsarMascara(false)}
+                />
+                <span>Sem máscara</span>
+              </label>
+            </div>
+          </fieldset>
 
           <div className="generator-grid">
             {GERADORES.map((gerador) => (
@@ -199,7 +231,9 @@ export default function App() {
           {gerado && (
             <div className="generated" role="status">
               <div>
-                <span className="generated-label">{gerado.tipo} gerado</span>
+                <span className="generated-label">
+                  {gerado.tipo} gerado {gerado.mascara}
+                </span>
                 <code>{gerado.valor}</code>
               </div>
 

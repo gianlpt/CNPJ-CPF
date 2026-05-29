@@ -5,7 +5,7 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f4f6f9;
+  background: linear-gradient(135deg, #eff6ff 0%, #f4f6f9 45%, #f0fdf4 100%);
   color: #1f2933;
 }
 
@@ -23,7 +23,8 @@ body {
   background: #ffffff;
   border-radius: 20px;
   padding: 36px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+  border: 1px solid #e4e7eb;
 }
 
 .header {
@@ -50,11 +51,13 @@ h1 {
   margin-bottom: 12px;
   font-size: 32px;
   line-height: 1.15;
+  color: #111827;
 }
 
 h2 {
   margin-bottom: 6px;
   font-size: 22px;
+  color: #111827;
 }
 
 .description,
@@ -81,6 +84,7 @@ h2 {
 
 label {
   font-weight: 700;
+  color: #1f2933;
 }
 
 input {
@@ -89,7 +93,12 @@ input {
   border-radius: 10px;
   padding: 0 14px;
   font-size: 16px;
-  background: #fff;
+  background: #ffffff;
+  color: #111827;
+}
+
+input::placeholder {
+  color: #9aa5b1;
 }
 
 input:focus {
@@ -160,6 +169,53 @@ button {
   margin-bottom: 16px;
 }
 
+.format-control {
+  margin: 0 0 18px;
+  padding: 0;
+  border: 0;
+}
+
+.format-control legend {
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #1f2933;
+}
+
+.format-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.format-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #cbd2d9;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1f2933;
+  cursor: pointer;
+}
+
+.format-option:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.format-option input {
+  width: 18px;
+  height: 18px;
+  min-height: auto;
+  accent-color: #2563eb;
+}
+
+.format-option span {
+  font-weight: 700;
+}
+
 .generator-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -175,11 +231,13 @@ button {
   color: #1f2933;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .generator-card:hover {
   border-color: #2563eb;
+  background: #eff6ff;
   box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
   transform: translateY(-2px);
 }
@@ -187,6 +245,7 @@ button {
 .generator-card strong {
   display: block;
   margin-bottom: 8px;
+  color: #111827;
   font-size: 16px;
 }
 
@@ -231,7 +290,7 @@ button {
   border: 1px solid #16a34a;
   border-radius: 8px;
   background: #16a34a;
-  color: #fff;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 700;
   padding: 8px 14px;
@@ -259,6 +318,10 @@ input:focus-visible {
   }
 
   .generator-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .format-options {
     grid-template-columns: 1fr;
   }
 
