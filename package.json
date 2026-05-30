@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test:cnpj": "node scripts/test-cnpj.js"
+    "test:cnpj": "node scripts/test-cnpj.js",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
