@@ -8,8 +8,11 @@
     "build": "vite build",
     "preview": "vite preview",
     "test:cnpj": "node scripts/test-cnpj.js",
-    "test:unit": "vitest run",
-    "test:unit:watch": "vitest"
+    "test:unit": "vitest run src",
+    "test:unit:watch": "vitest src",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
@@ -18,6 +21,7 @@
     "vite": "latest"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "vitest": "^4.1.7"
   }
 }
