@@ -5,7 +5,7 @@ export function validarCnpjAlfanumerico(valor) {
 
   // Formato esperado:
   // 12 primeiros caracteres alfanuméricos + 2 dígitos verificadores numéricos.
-  //if (!/^[A-Z0-9]{12}[0-9]{2}$/.test(cnpj)) {
+  if (!/^[A-Z0-9]{12}[0-9]{2}$/.test(cnpj)) {
     return false;
   }
 
