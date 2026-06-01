@@ -4,9 +4,9 @@
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #eff6ff 0%, #f4f6f9 45%, #f0fdf4 100%);
-  color: #1f2933;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  background: #f8fafc;
+  color: #111827;
 }
 
 .page {
@@ -21,24 +21,24 @@ body {
   width: 100%;
   max-width: 760px;
   background: #ffffff;
-  border-radius: 20px;
-  padding: 36px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
-  border: 1px solid #e4e7eb;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 40px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.04);
 }
 
 .header {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .eyebrow {
   display: inline-block;
-  margin-bottom: 8px;
-  color: #2563eb;
-  font-size: 14px;
+  margin-bottom: 10px;
+  color: #6b7280;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
 }
 
 h1,
@@ -49,25 +49,28 @@ p {
 
 h1 {
   margin-bottom: 12px;
-  font-size: 32px;
-  line-height: 1.15;
+  font-size: 36px;
+  line-height: 1.1;
   color: #111827;
+  letter-spacing: -0.04em;
 }
 
 h2 {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   font-size: 22px;
   color: #111827;
+  letter-spacing: -0.02em;
 }
 
 .description,
 .section-header p,
 .hint {
-  color: #52606d;
-  line-height: 1.5;
+  color: #4b5563;
+  line-height: 1.6;
 }
 
 .description {
+  max-width: 620px;
   margin-bottom: 0;
 }
 
@@ -83,44 +86,47 @@ h2 {
 }
 
 label {
+  color: #111827;
+  font-size: 14px;
   font-weight: 700;
-  color: #1f2933;
 }
 
 input {
   min-height: 48px;
-  border: 1px solid #cbd2d9;
-  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
   padding: 0 14px;
   font-size: 16px;
   background: #ffffff;
   color: #111827;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input::placeholder {
-  color: #9aa5b1;
+  color: #9ca3af;
 }
 
 input:focus {
-  outline: 3px solid #dbeafe;
-  border-color: #2563eb;
+  outline: none;
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
 }
 
 input[aria-invalid="true"] {
-  border-color: #c62828;
+  border-color: #dc2626;
 }
 
 .hint {
   margin-bottom: 0;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .feedback {
   margin: 4px 0 0;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .feedback-success {
@@ -143,42 +149,50 @@ button {
   width: 100%;
   min-height: 48px;
   border: 0;
-  border-radius: 10px;
-  background: #2563eb;
+  border-radius: 12px;
+  background: #111827;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: #374151;
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .btn-primary:disabled {
-  opacity: 0.5;
+  background: #d1d5db;
+  color: #6b7280;
   cursor: not-allowed;
 }
 
 .divider {
-  border-top: 1px solid #e4e7eb;
-  margin: 28px 0;
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 32px 0;
 }
 
 .section-header {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .format-control {
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   padding: 0;
   border: 0;
 }
 
 .format-control legend {
   margin-bottom: 10px;
+  color: #111827;
+  font-size: 14px;
   font-weight: 700;
-  color: #1f2933;
 }
 
 .format-options {
@@ -193,26 +207,28 @@ button {
   gap: 10px;
   min-height: 48px;
   padding: 12px 14px;
-  border: 1px solid #cbd2d9;
-  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
   background: #ffffff;
-  color: #1f2933;
+  color: #111827;
   cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .format-option:hover {
-  border-color: #2563eb;
-  background: #eff6ff;
+  border-color: #111827;
+  background: #f9fafb;
 }
 
 .format-option input {
   width: 18px;
   height: 18px;
   min-height: auto;
-  accent-color: #2563eb;
+  accent-color: #111827;
 }
 
 .format-option span {
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -225,21 +241,22 @@ button {
 .generator-card {
   min-height: 132px;
   padding: 18px;
-  border: 1px solid #cbd2d9;
+  border: 1px solid #e5e7eb;
   border-radius: 14px;
   background: #ffffff;
-  color: #1f2933;
+  color: #111827;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease,
-    background 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.1s ease;
 }
 
 .generator-card:hover {
-  border-color: #2563eb;
-  background: #eff6ff;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
-  transform: translateY(-2px);
+  border-color: #111827;
+  background: #f9fafb;
+}
+
+.generator-card:active {
+  transform: translateY(1px);
 }
 
 .generator-card strong {
@@ -247,13 +264,14 @@ button {
   margin-bottom: 8px;
   color: #111827;
   font-size: 16px;
+  font-weight: 700;
 }
 
 .generator-card span {
   display: block;
-  color: #52606d;
+  color: #4b5563;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .generated {
@@ -261,17 +279,17 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 18px;
+  margin-top: 20px;
   padding: 16px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
 }
 
 .generated-label {
   display: block;
   margin-bottom: 6px;
-  color: #166534;
+  color: #4b5563;
   font-size: 13px;
   font-weight: 700;
 }
@@ -280,30 +298,33 @@ button {
   display: block;
   background: transparent;
   padding: 0;
-  color: #166534;
+  color: #111827;
+  font-family: "Courier New", monospace;
   font-size: 18px;
   font-weight: 700;
 }
 
 .btn-copy {
-  min-height: 36px;
-  border: 1px solid #16a34a;
-  border-radius: 8px;
-  background: #16a34a;
-  color: #ffffff;
+  min-height: 38px;
+  border: 1px solid #111827;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
   font-size: 14px;
   font-weight: 700;
   padding: 8px 14px;
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .btn-copy:hover {
-  background: #15803d;
+  background: #111827;
+  color: #ffffff;
 }
 
 button:focus-visible,
 input:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid rgba(17, 24, 39, 0.18);
   outline-offset: 2px;
 }
 
@@ -314,7 +335,12 @@ input:focus-visible {
   }
 
   .card {
-    padding: 24px;
+    padding: 28px;
+    border-radius: 16px;
+  }
+
+  h1 {
+    font-size: 30px;
   }
 
   .generator-grid {
