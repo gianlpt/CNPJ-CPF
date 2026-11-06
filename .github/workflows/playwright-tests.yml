@@ -12,7 +12,8 @@ on:
 jobs:
   playwright-tests:
     name: Run Playwright tests
-    runs-on: ubuntu-latest
+    # Playwright 1.60 não suporta Ubuntu 26.04, usado por ubuntu-latest.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
 
     steps:
