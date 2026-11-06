@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "codex": "codex",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
@@ -21,6 +22,7 @@
     "vite": "latest"
   },
   "devDependencies": {
+    "@openai/codex": "^0.167.0",
     "@playwright/test": "^1.60.0",
     "vitest": "^4.1.7"
   }
